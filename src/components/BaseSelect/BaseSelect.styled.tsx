@@ -28,7 +28,35 @@ export const Trigger = styled.button`
 export const Content = styled.ul`
   border-radius: 10px;
   width: 100%;
-  overflow: hidden;
+  overflow: auto;
+  max-height: min(20rem, 50vh);
   background-color: #fff;
   box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.1);
+`;
+
+export const Option = styled.li`
+  display: block;
+  padding: 0.8rem 1rem;
+
+  &:hover,
+  &:focus,
+  &[aria-selected="true"] {
+    outline: none;
+    background-color: #b7faac;
+  }
+`;
+
+export const Value = styled.div`
+  pointer-events: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+export const Icon = styled.div`
+  min-width: 1rem;
+
+  svg {
+    stroke: currentColor;
+  }
 `;

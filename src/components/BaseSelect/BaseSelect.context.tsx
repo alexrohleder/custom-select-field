@@ -19,6 +19,7 @@ export const BaseSelectContext = createContext<ContextValue>({
 type Props = {
   value: string;
   onChange: (value: string) => void;
+  onOpenStateChange?: (open: boolean) => void;
   children: ReactNode;
 };
 
@@ -36,7 +37,10 @@ function BaseSelectContextProvider(props: Props) {
           setOpen(false);
         },
         isOpen,
-        setOpen,
+        setOpen: (newOpen) => {
+          setOpen(newOpen);
+          props.onOpenStateChange?.(newOpen);
+        },
       }}
     >
       {props.children}

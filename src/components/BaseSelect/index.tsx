@@ -1,20 +1,24 @@
 import { ReactNode } from "react";
-import { Root, Trigger, Content } from "./BaseSelect";
-import Option from "./BaseSelectOption";
+import { Root, Trigger, Content, Option, Value, Icon } from "./BaseSelect";
 
 export * from "./BaseSelect";
-export { default as Option } from "./BaseSelectOption";
 
 type Props = {
   value: string;
   onChange: (value: string) => void;
+  placeholder?: string;
   children: ReactNode;
 };
 
 function BaseSelect(props: Props) {
+  const placeholder = props.placeholder ?? "Velg";
+
   return (
     <Root value={props.value} onChange={props.onChange}>
-      <Trigger>{props.value}</Trigger>
+      <Trigger>
+        <Value placeholder={placeholder}>{props.value}</Value>
+        <Icon />
+      </Trigger>
       <Content>{props.children}</Content>
     </Root>
   );

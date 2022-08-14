@@ -1,11 +1,6 @@
 import { ComponentPropsWithoutRef } from "react";
 
-type Props = Omit<
-  ComponentPropsWithoutRef<"svg">,
-  "className" | "viewBox" | "fill"
-> & {
-  className: string;
-};
+type Props = Omit<ComponentPropsWithoutRef<"svg">, "viewBox" | "fill">;
 
 function ChevronDownIcon(props: Props) {
   return (
@@ -18,7 +13,7 @@ function ChevronDownIcon(props: Props) {
       <path
         d="M0.606995 1.27173L6.60699 7.27173L12.607 1.27173"
         stroke="black"
-        stroke-width="1.2"
+        strokeWidth="1.2"
       />
     </svg>
   );

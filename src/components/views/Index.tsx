@@ -1,31 +1,14 @@
 import { useState } from "react";
 import * as Styled from "./Index.styled";
-import BaseSelect from "../BaseSelect";
-
-const breeds = [
-  "Affenpinscher",
-  "Afghan Hound",
-  "Airedale Terrier",
-  "Akita",
-  "Alaskan Malamute",
-];
+import BreedSelector from "../BreedSelector";
 
 export default function Index() {
-  const [breed, setBreed] = useState(breeds[0]);
+  const [breed, setBreed] = useState("");
 
   return (
     <Styled.Container>
       <Styled.Fieldset>
-        <Styled.Label>
-          Hunderase
-          <BaseSelect value={breed} onChange={setBreed}>
-            {breeds.map((value) => (
-              <BaseSelect.Option key={value} value={value}>
-                {value}
-              </BaseSelect.Option>
-            ))}
-          </BaseSelect>
-        </Styled.Label>
+        <BreedSelector value={breed} onChange={setBreed} />
       </Styled.Fieldset>
     </Styled.Container>
   );

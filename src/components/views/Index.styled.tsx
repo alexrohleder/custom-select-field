@@ -19,9 +19,3 @@ export const Fieldset = styled.fieldset`
   max-width: 535px;
   margin: 0 1rem;
 `;
-
-export const Label = styled.label`
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-`;
