@@ -1,5 +1,5 @@
-function Index() {
-  return <div className="bg-red-200">hello world</div>;
-}
+import Index from "../components/views/Index";
 
-export default Index;
+export default function App() {
+  return <Index />;
+}
