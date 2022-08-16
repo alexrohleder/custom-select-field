@@ -1,18 +1,21 @@
-import { DismissableLayer } from "@radix-ui/react-dismissable-layer";
 import {
   forwardRef,
   MouseEventHandler,
   ReactNode,
   useContext,
   useId,
-  useLayoutEffect,
 } from "react";
+import OutsideClickHandler from "react-outside-click-handler";
 import { RemoveScroll } from "react-remove-scroll";
 import * as Popper from "../BasePopper";
 import ChevronDownIcon from "../icons/ChevronDownIcon";
 import LoadingIcon from "../icons/LoadingIcon";
 import ContextProvider, { BaseSelectContext } from "./BaseSelect.context";
 import * as Styled from "./BaseSelect.styled";
+import useAutoFocus from "./useAutoFocus";
+import useDismissable from "./useDismissable";
+import useKeyboardNavigation from "./useKeyboardNavigation";
+import useSearch from "./useSearch";
 
 type RootProps = {
   value: string;
@@ -67,75 +70,49 @@ type ContentProps = {
 
 export const Content = forwardRef<HTMLUListElement, ContentProps>(
   function BaseSelectContent(props, ref) {
-    const { isOpen, controlsId, setOpen } = useContext(BaseSelectContext);
-    const isRendered = isOpen && props.children;
+    const { isOpen } = useContext(BaseSelectContext);
+    const isRendered = isOpen && props.children ? true : false;
 
-    useLayoutEffect(() => {
-      if (isRendered) {
-        const controls = document.getElementById(controlsId);
-
-        if (controls) {
-          const selected = controls.querySelector("[aria-selected='true']");
-          const option = controls.querySelector("[role='option']");
-          const target = (selected || option) as HTMLElement | null;
-
-          if (target) {
-            target.focus();
-          }
-        }
-      }
-    }, [isRendered, controlsId]);
-
-    if (!isOpen || !props.children) {
+    if (!isRendered) {
       return null;
     }
 
     return (
       <RemoveScroll allowPinchZoom>
-        <DismissableLayer
-          onDismiss={() => setOpen(false)}
-          onFocusOutside={(event) => event.preventDefault()}
-          onKeyDown={(event) => {
-            const target = event.target as HTMLElement;
-
-            if (event.key === "Tab") {
-              event.preventDefault();
-            }
-
-            if (event.key === "Enter") {
-              target.click();
-            }
-
-            if (["ArrowUp", "ArrowDown"].includes(event.key)) {
-              let nodes = Array.from(
-                event.currentTarget.querySelectorAll('[role="option"]')
-              );
-
-              if (event.key === "ArrowUp") {
-                nodes = nodes.slice().reverse();
-              }
-
-              const currentIndex = nodes.indexOf(target);
-              const el = nodes.slice(currentIndex + 1).at(0) as HTMLElement;
-
-              el?.focus();
-              event.preventDefault();
-            }
-          }}
-        >
-          <Popper.Content>
-            <Styled.Content id={controlsId} role="listbox" ref={ref}>
-              {props.children}
-            </Styled.Content>
-          </Popper.Content>
-        </DismissableLayer>
+        <ContentListbox ref={ref}>{props.children}</ContentListbox>
       </RemoveScroll>
+    );
+  }
+);
+
+type ContentListboxProps = {
+  children: ReactNode;
+};
+
+const ContentListbox = forwardRef<HTMLUListElement, ContentListboxProps>(
+  function ContentListbox(props, ref) {
+    const { controlsId, setOpen } = useContext(BaseSelectContext);
+
+    useAutoFocus(controlsId);
+    useDismissable(() => setOpen(false));
+    useKeyboardNavigation(controlsId);
+    useSearch(controlsId);
+
+    return (
+      <OutsideClickHandler onOutsideClick={() => setOpen(false)}>
+        <Popper.Content>
+          <Styled.Content id={controlsId} role="listbox" ref={ref}>
+            {props.children}
+          </Styled.Content>
+        </Popper.Content>
+      </OutsideClickHandler>
     );
   }
 );
 
 type OptionProps = {
   value: string;
+  label: string;
   children: ReactNode;
 };
 
@@ -157,6 +134,8 @@ export const Option = forwardRef<HTMLLIElement, OptionProps>(
         role="option"
         aria-labelledby={id}
         aria-selected={selectedValue === props.value}
+        data-value={props.value}
+        data-label={props.label}
         tabIndex={0}
         onClick={onSelect}
       >
