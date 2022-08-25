@@ -13,7 +13,7 @@ import LoadingIcon from "../icons/LoadingIcon";
 import ContextProvider, { BaseSelectContext } from "./BaseSelect.context";
 import * as Styled from "./BaseSelect.styled";
 import useAutoFocus from "./useAutoFocus";
-import useDismissable from "./useDismissable";
+import useEscapeHandler from "./useEscapeHandler";
 import useKeyboardNavigation from "./useKeyboardNavigation";
 import useSearch from "./useSearch";
 
@@ -94,7 +94,7 @@ const ContentListbox = forwardRef<HTMLUListElement, ContentListboxProps>(
     const { controlsId, setOpen } = useContext(BaseSelectContext);
 
     useAutoFocus(controlsId);
-    useDismissable(() => setOpen(false));
+    useEscapeHandler(() => setOpen(false));
     useKeyboardNavigation(controlsId);
     useSearch(controlsId);
 

@@ -1,6 +1,6 @@
 import { useLayoutEffect } from "react";
 
-function useDismissable(close: () => void) {
+function useEscapeHandler(close: () => void) {
   useLayoutEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -13,4 +13,4 @@ function useDismissable(close: () => void) {
   }, []);
 }
 
-export default useDismissable;
+export default useEscapeHandler;
